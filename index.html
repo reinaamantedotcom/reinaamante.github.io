@@ -600,12 +600,16 @@
       <p style="font-size:0.88rem;color:var(--muted);line-height:1.6;">Fill this out and I'll get back to you within 24 hours.</p>
     </div>
 
-    <form class="inquiry-form" action="https://formsubmit.co/business@reinaamante.com" method="POST">
-      <!-- Honeypot spam protection -->
+    <div id="form-success" style="display:none;text-align:center;padding:36px 20px;">
+      <div style="font-size:2.2rem;margin-bottom:12px;">🌸</div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--ink);margin-bottom:8px;">Message received!</h3>
+      <p style="color:var(--muted);font-size:0.92rem;line-height:1.7;">Thanks for reaching out. I'll get back to you within 24 hours.</p>
+    </div>
+
+    <form class="inquiry-form" id="inquiry-form" action="https://formsubmit.co/ajax/business@reinaamante.com" method="POST">
       <input type="text" name="_honey" style="display:none">
       <input type="hidden" name="_captcha" value="false">
       <input type="hidden" name="_subject" value="New Service Inquiry from Website">
-      <input type="hidden" name="_next" value="https://reinaamante.com/#contact">
 
       <div class="form-row">
         <div class="form-group">
@@ -635,8 +639,33 @@
         <textarea id="fmessage" name="message" rows="3" placeholder="Tell me a bit about your business or what you're working on..."></textarea>
       </div>
 
-      <button type="submit" class="form-submit">Send Inquiry</button>
+      <button type="submit" class="form-submit" id="form-btn">Send Inquiry</button>
     </form>
+
+    <script>
+      document.getElementById('inquiry-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var btn = document.getElementById('form-btn');
+        btn.textContent = 'Sending...';
+        btn.disabled = true;
+        var data = new FormData(this);
+        fetch(this.action, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(json) {
+          document.getElementById('inquiry-form').style.display = 'none';
+          document.getElementById('form-success').style.display = 'block';
+        })
+        .catch(function() {
+          btn.textContent = 'Send Inquiry';
+          btn.disabled = false;
+          alert('Something went wrong. Please try again or email me directly.');
+        });
+      });
+    </script>
   </div>
 </section>
 
