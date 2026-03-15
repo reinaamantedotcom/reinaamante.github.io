@@ -1,2 +1,2 @@
 # reinaamante
-Reina Amante — Operations &amp; GTM Specialist
+Reina Amante — Work with me!
